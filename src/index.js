@@ -1,8 +1,17 @@
 const { ApolloServer } = require('apollo-server');
 const typeDefs = require('./schema');
+const { createStore } = require('./utils');
+const LaunchAPI = require('./datasources/launch');
+const UserApi = require('./datasources/user');
+
+const store = createStore();
 
 const server = new ApolloServer({
-  typeDefs
+  typeDefs,
+  dataSources: () => ({
+    LaunchAPI: new LaunchAPI(),
+    userAPI: new UserAPI({ store }),
+  })
 });
 
 server.listen().then(({ url }) => {
