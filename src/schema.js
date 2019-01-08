@@ -2,7 +2,7 @@ const { gql } = require('apollo-server');
 
  const typeDefs = gql`
   type Query {
-    launches: [Launch]!
+    launches(pageSize: Int, after: String): LaunchConnection!
     launch(id: ID!): Launch
     me: User
   }
@@ -27,6 +27,11 @@ const { gql } = require('apollo-server');
     name: String
     missionPatch(size: PatchSize): String
   }
+  type LaunchConnection {
+    cursor: String!
+    hasMore: Boolean!
+    launches: [Launch]!
+  }
   enum PatchSize {
     SMALL
     LARGE
@@ -42,7 +47,7 @@ const { gql } = require('apollo-server');
     message: String
     launches: [Launch]
   }
-  
+
  `;
 
  module.exports = typeDefs;
